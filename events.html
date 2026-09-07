@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="enback.webp" type="image/webp">
+    <!-- Loaded Cinzel (for luxury serif headings) & Montserrat (for tracked subtext) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Asul:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="navbar.css">
+    <title>Interactive Blooming Flower</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            height: 100dvh; /* Dynamic viewport height handles mobile browsers better */
+            width: 100%; 
+            overflow: hidden; /* Disables all page scrolling */
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* --- FULL SCREEN BACKGROUND CONTAINER --- */
+        .main {
+            width: 100vw;
+            height: 100%;
+            height: 100dvh;
+            background-image: url('enback.webp'); 
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 60px 20px 20px 20px; /* Reduced top padding slightly to prevent overflow */
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- FLYING BUTTERFLY STYLING --- */
+        .butterfly {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 70px; /* Adjust size as needed */
+            height: auto;
+            pointer-events: none; /* Prevents butterfly from blocking user clicks */
+            z-index: 500;
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        /* --- SUBTITLE INSTRUCTION TEXT --- */
+        .instruction-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #b38744;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        /* --- CARD STYLING --- */
+        .card {
+            width: 90%;
+            max-width: 450px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(255, 252, 245, 0.82), rgba(255, 248, 238, 0.65));
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 16px;
+            border: 1px solid #e6c896;
+            box-shadow: 0 6px 20px rgba(75, 29, 82, 0.08);
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(75, 29, 82, 0.15);
+        }
+
+        /* Reverse direction for center card */
+        .card.reverse {
+            flex-direction: row-reverse;
+        }
+
+        /* Illustration image inside card */
+        .card img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        /* Typography Inside Card */
+        .card-content {
+            flex-grow: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        /* Date Styling */
+        .card-content h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0 0 4px 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+
+        /* Event Title Styling */
+        .card-content p {
+            font-family: 'Cinzel', serif;
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #4b1d52;
+            letter-spacing: 1.5px;
+            line-height: 1.35;
+            text-transform: uppercase;
+        }
+
+        /* --- MODAL STYLING --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 10, 40, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(255, 246, 235, 0.95));
+            border: 3px solid #d3942b;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 420px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: scale(0.85);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            font-size: 1.8rem;
+            color: #4b1d52;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .modal-date {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #b38744;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4b1d52;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin: 0 0 12px 0;
+        }
+
+        .modal-info {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: #333333;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .modal-info p {
+            margin: 6px 0;
+        }
+
+        /* Location Button Styling */
+        .btn-location {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #4b1d52, #6b2875);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 1px solid #e6c896;
+            box-shadow: 0 4px 12px rgba(75, 29, 82, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-location:hover {
+            background: linear-gradient(135deg, #6b2875, #8c3599);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(75, 29, 82, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html"><u>Event</u></a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="guestbook.html">Guestbook</a></li>
+        </ul>
+    </nav>
+
+    <div id="home" class="main">
+        <!-- Animated Flying Butterfly -->
+        <img src="butterfly.gif" alt="Butterfly" class="butterfly" id="butterfly">
+
+        <!-- Events Header Image -->
+        <img src="eventstext.webp" style="width: 50%; max-width: 220px;" alt="EVENTS">
+
+        <!-- Card 1: Engagement -->
+        <div class="card" data-event="engagement">
+            <img src="engagement.webp" alt="Engagement">
+            <div class="card-content">
+                <h3>8th December</h3>
+                <p>Engagement<br>Godh Bharai</p>
+            </div>
+        </div>
+
+        <!-- Card 2: Haldi -->
+        <div class="card reverse" data-event="haldi">
+            <img src="haldi.webp" alt="Haldi Ceremony">
+            <div class="card-content">
+                <h3>11th December</h3>
+                <p>Haldi<br>Mehendi</p>
+            </div>
+        </div>
+
+        <!-- Card 3: Shaadi -->
+        <div class="card" data-event="shaadi">
+            <img src="shaadi.webp" alt="Shaadi Ceremony">
+            <div class="card-content">
+                <h3>12th December</h3>
+                <p>Shaadi</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- EVENT DETAILS MODAL --- -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal-card">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <img id="modalImg" src="" alt="Event Icon" class="modal-img">
+            <div id="modalDate" class="modal-date"></div>
+            <h2 id="modalTitle" class="modal-title"></h2>
+            
+            <div class="modal-info">
+                <p id="modalTime"></p>
+                <p id="modalVenue"></p>
+                <p id="modalDesc"></p>
+            </div>
+
+            <!-- Location Button -->
+            <a id="modalLocationBtn" href="#" target="_blank" class="btn-location">
+                <svg width="14" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                Location
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Event Data Configuration
+        const eventData = {
+            engagement: {
+                title: "Engagement & Godh Bharai",
+                date: "8th December",
+                time: "Time: 10:00 AM to 5:00 PM",
+                venue: "Venue: Orriva By Awadh, Ghaziabad",
+                desc: "Join us for an evening of joyous celebrations, ring exchange, and Godh Bharai ceremony.",
+                img: "engagement.webp",
+                locationUrl: "https://maps.app.goo.gl/txZhoH37wFUkFG577?g_st=aw"
+            },
+            haldi: {
+                title: "Haldi & Mehendi",
+                date: "11th December",
+                time: "Time: 10:00 AM onwards",
+                venue: "Venue: Gupta Residence",
+                desc: "A bright and cheerful morning filled with turmeric blessings, henna artistry, and music.",
+                img: "haldi.webp",
+                locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
+            },
+            shaadi: {
+                title: "Shaadi Ceremony",
+                date: "12th December",
+                time: "Time: 7:00 PM onwards",
+                venue: "Venue: Lotus Portico, Jankipuram, Lucknow",
+                desc: "Celebrate the sacred wedding rituals and dinner as we unite two hearts in marriage.",
+                img: "shaad.webp",
+                locationUrl: "https://maps.app.goo.gl/wJx24kRSrm7DUoUXA?g_st=aw"
+            }
+        };
+
+        const modal = document.getElementById('eventModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cards = document.querySelectorAll('.card');
+
+        // Modal triggers
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const eventType = card.getAttribute('data-event');
+                const data = eventData[eventType];
+
+                if (data) {
+                    document.getElementById('modalImg').src = data.img;
+                    document.getElementById('modalDate').textContent = data.date;
+                    document.getElementById('modalTitle').textContent = data.title;
+                    document.getElementById('modalTime').textContent = data.time;
+                    document.getElementById('modalVenue').textContent = data.venue;
+                    document.getElementById('modalDesc').textContent = data.desc;
+                    document.getElementById('modalLocationBtn').href = data.locationUrl;
+
+                    modal.classList.add('active');
+                }
+            });
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // --- RANDOM CONTINUOUS BUTTERFLY FLIGHT SYSTEM ---
+        const butterfly = document.getElementById('butterfly');
+        let currentX = window.innerWidth / 2;
+        let currentY = window.innerHeight / 3;
+        let targetX = currentX;
+        let targetY = currentY;
+        let speed = 2.5; // Adjust movement speed
+
+        function getRandomTarget() {
+            const padding = 60; // Keep butterfly slightly inside viewport edges
+            targetX = padding + Math.random() * (window.innerWidth - padding * 2 - 70);
+            targetY = padding + Math.random() * (window.innerHeight - padding * 2 - 70);
+        }
+
+        function animateButterfly() {
+            const dx = targetX - currentX;
+            const dy = targetY - currentY;
+            const distance = Math.hypot(dx, dy);
+
+            if (distance < 20) {
+                getRandomTarget(); // Choose a new target once reached
+            } else {
+                currentX += (dx / distance) * speed;
+                currentY += (dy / distance) * speed;
+
+                // Add a gentle floating wave/wobble effect
+                const wobble = Math.sin(Date.now() / 200) * 8;
+                
+                // Horizontal flip based on movement direction (dx < 0 flies left)
+                const flip = dx < 0 ? 1 : -1;
+
+                butterfly.style.transform = `translate3d(${currentX}px, ${currentY + wobble}px, 0) scaleX(${flip})`;
+            }
+
+            requestAnimationFrame(animateButterfly);
+        }
+
+        // Initialize butterfly position and target
+        getRandomTarget();
+        animateButterfly();
+
+        // Handle browser resize gracefully
+        window.addEventListener('resize', () => {
+            getRandomTarget();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Loaded Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Asul:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Load a script font for "Oh Snap!" -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="navbar.css">
+    <title>Interactive Guestbook</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%;
+            overflow: hidden; /* Prevents body scrolling */
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* --- TRULY STATIC BACKGROUND (Fixed viewport overlay) --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background-image: url('galleryback.webp');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1; /* Placed behind everything */
+            transform: translateZ(0); /* Prevents mobile scroll artifacts */
+        }
+
+        /* --- SCROLLABLE CONTENT AREA --- */
+        .main {
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            overflow-y: auto; /* Only content inside scrolls */
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            
+            /* --- UPDATED CSS FOR CENTERING AND EVEN SPACING --- */
+            align-items: center;         /* Centers content horizontally */
+            justify-content: space-evenly; /* Distributes content evenly vertically */
+            
+            /* Reduced padding-top/bottom as space-evenly handles vertical spacing */
+            padding: 20px 20px; 
+            position: relative;
+            color: #b38b5c; /* Default gold color from image */
+            text-align: center;
+        }
+
+        /* --- CAMERA IMAGE --- */
+        .camera-img {
+            width: 86%; 
+            max-width: 300px; 
+            /* margin-bottom handled by space-evenly */
+            margin-bottom: 0; 
+        }
+
+        /* --- PURPLE UPLOAD BOX --- */
+        .upload-box {
+             background: rgba(33 1 64 / 85%);
+             backdrop-filter: blur(4px);
+            width: 90%;
+            max-width: 340px;
+            border-radius: 10px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* margin-bottom handled by space-evenly */
+            margin-bottom: 0; 
+        }
+
+        .upload-box-heading {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: #f6e6c2; /* Light cream/gold from image */
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .upload-icon {
+            width: 90px;
+            margin-bottom: 20px;
+        }
+
+        /* --- WHITE BUTTON --- */
+        .upload-btn {
+            background-color: #dbd2fa; 
+            color: #5c306d; /* Purple text */
+            border: none;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding: 12px 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+        }
+
+        /* Footer text under the box */
+        .footer-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            color: #5c306d; /* Purple color */
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Event</a></li>
+            <li><a href="gallery.html"><u>Gallery</u></a></li>
+            <li><a href="guestbook.html">Guestbook</a></li>
+        </ul>
+    </nav>
+
+    <div id="home" class="main">
+        <!-- Top Camera Image -->
+        <img src="camera.webp" class="camera-img" alt="Camera with flowers">
+
+        <!-- Purple Upload Box -->
+        <div class="upload-box">
+            <h3 class="upload-box-heading">UPLOAD YOUR PHOTOS & VIDEOS</h3>
+            
+            <!-- Purple Cloud Icon (replace with your file) -->
+            <img src="cloud.webp" class="upload-icon" alt="Upload cloud icon">
+            
+            <!-- White Button -->
+            <!-- FIXED: Removed syntax error "button" inside closing tag -->
+            <button class="upload-btn">UPLOAD</button>
+       </div>
+        
+    </div>
+   
+</body>
+</html>

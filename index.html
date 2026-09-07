@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Asul:wght@400;700&display=swap" rel="stylesheet">
+	   <link rel="stylesheet" href="navbar.css">
+    <title>Our Wedding Invitation</title>
+    <style>
+        :root {
+            /* Envelope & Theme Colors */
+            --flap-color: #f4e8ff;
+            --left-right-flap-color: #f4e8ff;
+            --bottom-flap-color: #ead7fb;
+            --purple-bg: #411e60; /* Matching theme purple color for letterbox edges */
+            
+            --accent: #b48b58;
+            --transition-speed: 2.2s; 
+            --easing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body, html { 
+            margin: 0; padding: 0; 
+            height: 100%; width: 100%; 
+            background-color: var(--purple-bg); 
+            overflow: hidden; 
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Asul', serif;
+        }
+
+        .stage { 
+            width: 100vw; 
+            height: 100vh;
+            height: 100dvh;
+            perspective: 1500px; 
+            position: relative;
+            background-color: var(--purple-bg);
+            background-image: url('enback.webp'); 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain; /* Ensures background fits screen without cropping */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-full {
+            position: relative; 
+            width: 80%;
+            max-width: 450px; 
+            height: 250px;
+            background-color: var(--left-right-flap-color);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10; 
+            transform-style: preserve-3d;
+            transition: all 1s var(--easing);
+            box-shadow: 5px 10px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+
+        /* --- 4 POLYGONS OF THE ENVELOPE --- */
+        .flap {
+            position: absolute; 
+            top: 0; 
+            width: 100%; 
+            height: 50%; 
+            border: 1px;
+            background-color: var(--bottom-flap-color);
+            background-size: cover;
+            background-position: center;
+            clip-path: polygon(0% 0%, 100% 0%, 120% 30%, 50% 100%, -40% 8%);
+            transform-origin: top; 
+            transition: transform var(--transition-speed) var(--easing), z-index 0s linear 0.5s;
+            z-index: 15;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.15));
+        }
+
+        .envelope-full::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 50%; height: 100%;
+            background-color: var(--left-right-flap-color);
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+            z-index: 12;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope-full::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 50%; height: 100%;
+            background-color: var(--left-right-flap-color);
+            clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+            z-index: 12;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .bottom-flap {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 60%;
+            background-color: var(--bottom-flap-color);
+            clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+            z-index: 13;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope-full.open {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            box-shadow: none;
+        }
+
+        @media (min-width: 768px) {
+            .envelope-full.open {
+                width: 60%;
+                max-width: 60%;
+                height: 100%;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); 
+            }
+        }
+
+        .emblem {
+            position: absolute; 
+            top: calc(50% - 50px);
+            width: 80px; 
+            height: 80px;
+            background-image: url('emblem.webp'); 
+            background-repeat: no-repeat;
+            background-position: center; 
+            background-size: contain;
+            z-index: 20; 
+            transition: all 0.8s var(--easing); 
+            transform: translateZ(35px); 
+            cursor: pointer;
+        }
+
+        .invite-card {
+            width: 100%; height: 100%; 
+            background: var(--purple-bg);
+            opacity: 0; 
+            position: absolute; top: 0; left: 0; 
+            z-index: 1;
+            overflow: hidden; /* Prevent scrolling outside container */
+            transition: opacity 1s ease 0.8s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+
+        .details { 
+            text-align: center; 
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* NEW: Aspect Ratio Outer Container */
+        .bg-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            /* Set this ratio to match your homeback.png image proportions */
+            aspect-ratio: 9 / 16; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        
+        .main {
+            width: 100%;
+            height: 100%;
+            background-color: var(--purple-bg);
+            background-image: url('homeback.webp'); 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover; /* Fits edge-to-edge inside the constrained ratio */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 70px 20px 20px 20px; 
+            overflow: hidden;
+        }
+
+        /* Top container housing rings, dna, Date */
+        .top-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1.7vh;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .top-content img {
+            max-width: 100%;
+            max-height: 18vh;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* --- BOTTOM CONTENT / COUNTDOWN / CALL TO ACTION --- */
+        .bottom-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .welcome-text {
+            color: #f4e8ff;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            margin: 0;
+            text-transform: capitalize;
+        }
+
+        .events-btn {
+            display: inline-block;
+            background-color: rgb(53, 18, 95, 0.5);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 8px 24px;
+            border-radius: 25px;
+            border: 1px solid rgba(244, 232, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+
+        .events-btn:hover, .events-btn:active {
+            background-color: rgba(155, 76, 133, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        /* --- COUNTDOWN TIMER STYLES --- */
+        .countdown-container {
+            background: rgba(230, 219, 241, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(244, 232, 255, 0.25);
+            border-radius: 12px;
+            padding: 10px 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color:#641874;
+            max-width: 90%;
+            width: 260px;
+        }
+
+        .countdown-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight:600;
+            margin-bottom: 6px;
+            color: #641874;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .timer-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40px;
+        }
+
+        .timer-number {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .timer-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+            opacity: 0.85;
+        }
+
+        .timer-divider {
+            font-size: 0.95rem;
+            opacity: 0.6;
+            margin-bottom: 10px;
+        }
+
+        /* Animation States */
+        .open .flap { transform: rotateX(155deg); z-index: 5; }
+        .open .emblem { opacity: 0; transform: translateY(-40px) scale(0.5); pointer-events: none; }
+        .open .invite-card { opacity: 1; z-index: 25; }
+
+        .envelope-full.open::before, 
+        .envelope-full.open::after, 
+        .envelope-full.open .bottom-flap { 
+            opacity: 0; 
+        }
+
+        .petal { 
+            position: fixed; 
+            top: -50px; 
+            z-index: 99; 
+            pointer-events: none; 
+            border-radius: 150% 0 150% 0;
+            box-shadow: 0 20px 5px rgba(0,0,0,0.05);
+            opacity: 0.9;
+        }
+
+        @keyframes fall { 
+            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; } 
+            10% { opacity: 1; } 
+            50% { transform: translateY(50vh) rotate(180deg) translateX(50px); }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; } 
+        }
+    </style>
+</head>
+<body>
+<audio id="inviteMusic" preload="auto" playsinline>
+    <source src="song1.mp3" type="audio/mpeg">
+</audio>
+    <div class="stage">
+        <div class="envelope-full" id="envelope" onclick="openInvite()" ontouchstart="openInvite()">
+            <div class="flap"></div>
+            <div class="bottom-flap"></div>
+            <div class="emblem"></div>
+            
+            <div class="invite-card" id="card">
+                <nav class="navbar">
+                    <ul>
+                        <li><a href="index.html"><u>Home</u></a></li>
+                        <li><a href="https://nikieeestar13.github.io/DeekshaNAnantWedding/events.html">Event</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="guestbook.html">Guestbook</a></li>
+                    </ul>
+                </nav>
+
+                <div class="scroll-content">
+                    <div class="details">
+                        <!-- Wrapper to hold background image proportions strictly -->
+                        <div class="bg-container">
+                            <div id="home" class="main">
+                                <!-- Top Half: Images stacked neatly -->
+                                <div class="top-content">
+                                    <img src="rings.webp" style="margin-top:8%; width: 10%; max-width: 100px;" alt="Rings">
+                                    <img src="families.webp" style="width: 75%; max-width: 250px;" alt="Families">
+                                    <img src="dna.webp" style="width: 55%; max-width: 250px;" alt="DNA">
+                                    <img src="Date.webp" style="width: 70%; max-width: 320px;" alt="Date">
+                                </div>
+                            
+                                <!-- Bottom Half: Countdown Box, Greeting, & Events Button -->
+                                <div class="bottom-content">
+                                    <div class="countdown-container">
+                                        <div class="countdown-title">Until Forever Begins</div>
+                                        <div class="countdown-timer">
+                                            <div class="timer-box">
+                                                <span id="days" class="timer-number">00</span>
+                                                <span class="timer-label">Days</span>
+                                            </div>
+                                            <span class="timer-divider">:</span>
+                                            <div class="timer-box">
+                                                <span id="hours" class="timer-number">00</span>
+                                                <span class="timer-label">Hours</span>
+                                            </div>
+                                            <span class="timer-divider">:</span>
+                                            <div class="timer-box">
+                                                <span id="minutes" class="timer-number">00</span>
+                                                <span class="timer-label">Mins</span>
+                                            </div>
+                                            <span class="timer-divider">:</span>
+                                            <div class="timer-box">
+                                                <span id="seconds" class="timer-number">00</span>
+                                                <span class="timer-label">Secs</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a href="https://nikieeestar13.github.io/DeekshaNAnantWedding/events.html" class="events-btn">Events</a>
+                                    <p class="welcome-text">We Can't Wait to See You!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+function openInvite() {
+    const env = document.getElementById('envelope');
+    const audio = document.getElementById('inviteMusic');
+
+    if (!env.classList.contains('open')) {
+        env.classList.add('open');
+        
+        audio.currentTime = 17;
+        audio.play().catch(error => {
+            console.log("Mobile playback blocked. Trying alternate 'unlock'...");
+            const forcePlay = () => {
+                audio.play();
+                document.removeEventListener('click', forcePlay);
+            };
+            document.addEventListener('click', forcePlay);
+        });
+
+        startPetals();
+    }
+}
+
+function startPetals() {
+   const colors = [ '#E6E6FA', '#DCD0FF', '#BDB5D5', '#967BB6', '#7B1FA2', '#8A9A86' ];
+
+    for (let i = 0; i < 60; i++) { 
+        setTimeout(() => {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            p.style.backgroundColor = randomColor;
+            
+            const size = (Math.random() * 10 + 10) + 'px';
+            p.style.width = size;
+            p.style.height = size;
+            
+            p.style.left = Math.random() * 100 + 'vw';
+            
+            const duration = (Math.random() * 3 + 4) + 's';
+            const delay = (Math.random() * 2) + 's';
+            p.style.animation = `fall ${duration} ${delay} linear forwards`;
+            
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 8000);
+        }, i * 120);
+    }
+}
+
+/* --- COUNTDOWN TIMER SCRIPT --- */
+function startCountdown() {
+    const targetDate = new Date('2026-12-12T18:00:00').getTime();
+
+    function updateTimer() {
+        const now = new Date().getTime();
+        const difference = targetDate - now;
+
+        if (difference <= 0) {
+            document.querySelector('.countdown-container').innerHTML = "<div class='countdown-title'>Today is the Day!</div>";
+            return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById('days').innerText = String(days).padStart(2, '0');
+        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+}
+
+startCountdown();
+
+document.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+    </script>
+</body>
+</html>

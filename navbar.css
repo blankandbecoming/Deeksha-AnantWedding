@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Asul:wght@400;700&display=swap');
+
+.navbar {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgba(65, 30, 96, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 0 10px;
+    font-family: 'Asul', sans-serif;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap;
+}
+
+.navbar li a {
+    color: #ffffff; /* Clean white */
+    text-decoration: none;
+    font-family: 'Asul', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400; /* Set to thin/regular */
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar li a:hover {
+    background-color: rgba(155, 76, 133, 0.8);
+    color: #ffffff;
+}
+
+@media (min-width: 480px) {
+    .navbar ul { gap: 20px; }
+    .navbar li a { font-size: 0.95rem; padding: 6px 12px; letter-spacing: 1px; }
+}
+
+.scroll-content {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
