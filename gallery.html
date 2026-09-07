@@ -53,12 +53,8 @@
             -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
-            
-            /* --- UPDATED CSS FOR CENTERING AND EVEN SPACING --- */
             align-items: center;         /* Centers content horizontally */
             justify-content: space-evenly; /* Distributes content evenly vertically */
-            
-            /* Reduced padding-top/bottom as space-evenly handles vertical spacing */
             padding: 20px 20px; 
             position: relative;
             color: #b38b5c; /* Default gold color from image */
@@ -69,14 +65,13 @@
         .camera-img {
             width: 86%; 
             max-width: 300px; 
-            /* margin-bottom handled by space-evenly */
             margin-bottom: 0; 
         }
 
         /* --- PURPLE UPLOAD BOX --- */
         .upload-box {
-             background: rgba(33 1 64 / 85%);
-             backdrop-filter: blur(4px);
+            background: rgba(33, 1, 64, 0.85);
+            backdrop-filter: blur(4px);
             width: 90%;
             max-width: 340px;
             border-radius: 10px;
@@ -85,7 +80,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* margin-bottom handled by space-evenly */
             margin-bottom: 0; 
         }
 
@@ -103,7 +97,7 @@
             margin-bottom: 20px;
         }
 
-        /* --- WHITE BUTTON --- */
+        /* --- BUTTON STYLING (ANCHOR TAG) --- */
         .upload-btn {
             background-color: #dbd2fa; 
             color: #5c306d; /* Purple text */
@@ -117,6 +111,21 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             text-transform: uppercase;
+            text-decoration: none; /* Removes standard underline */
+            display: inline-block;
+            outline: none; /* Prevents focus/click border outline */
+            user-select: none; /* Prevents text highlighting on click */
+            -webkit-user-select: none;
+        }
+
+        /* Ensure link states never show underlines or state changes */
+        .upload-btn:hover,
+        .upload-btn:focus,
+        .upload-btn:active,
+        .upload-btn:visited {
+            text-decoration: none;
+            outline: none;
+            color: #5c306d;
         }
 
         /* Footer text under the box */
@@ -125,7 +134,6 @@
             font-size: 12px;
             color: #5c306d; /* Purple color */
         }
-
     </style>
 </head>
 <body>
@@ -147,13 +155,12 @@
         <div class="upload-box">
             <h3 class="upload-box-heading">UPLOAD YOUR PHOTOS & VIDEOS</h3>
             
-            <!-- Purple Cloud Icon (replace with your file) -->
+            <!-- Purple Cloud Icon -->
             <img src="cloud.webp" class="upload-icon" alt="Upload cloud icon">
             
-            <!-- White Button -->
-            <!-- FIXED: Removed syntax error "button" inside closing tag -->
-            <button class="upload-btn"><a href="https://photos.app.goo.gl/qE7H9TP9CjBCPWB7A">UPLOAD</a></button>
-       </div>
+            <!-- Link styled as a button -->
+            <a href="https://photos.app.goo.gl/qE7H9TP9CjBCPWB7A" target="_blank" rel="noopener noreferrer" class="upload-btn">UPLOAD</a>
+        </div>
         
     </div>
    
