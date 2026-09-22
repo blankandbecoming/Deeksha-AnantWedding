@@ -53,24 +53,11 @@
             height: auto;
         }
 
-        /* --- NAVBAR INITIAL STATE (FIXED AT TOP WITH ZERO MARGIN/PADDING ABOVE) --- */
+        /* --- NAVBAR INITIAL STATE (HIDDEN) --- */
         .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 10px;
-            margin: 0px;
-            padding: 0;
-            z-index: 1000;
             opacity: 0;
             pointer-events: none;
             transition: opacity 1s ease 1s; /* Fades in smoothly after envelope opening */
-        }
-
-        .navbar ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
         }
 
         .navbar.visible {
@@ -555,7 +542,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 80px 20px 70px 20px; /* Extra bottom padding for fixed button */
+            padding: 80px 20px 70px 20px; /* Added extra bottom padding for fixed button */
             font-family: 'Cinzel', serif;
             position: relative;
         }
@@ -588,7 +575,7 @@
         .book-card {
             position: relative;
             width: 100%;
-            height: 180px;
+            height: 100px;
             background: linear-gradient(135deg, #4a154b 0%, #2e0c30 100%);
             border-radius: 4px 10px 10px 4px;
             box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.4);
@@ -691,7 +678,7 @@
             padding: 0;
             border: none;
             border-top: 1px solid #d4af37;
-            border-radius: 0;
+            border-radius: 0; /* Fully square */
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -897,7 +884,7 @@
         <source src="thousandyears.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- FIXED NAVBAR (Initially Hidden, Pinned to Top) -->
+    <!-- FIXED NAVBAR (Initially Hidden) -->
     <nav class="navbar" id="navbar">
         <ul>
             <li><a href="#home">Home</a></li>
@@ -1201,7 +1188,7 @@
                     navbar.classList.add('visible');
                 }
 
-                audio.currentTime = 17;
+                audio.currentTime = 30;
                 audio.play().catch(error => {
                     const forcePlay = () => {
                         audio.play();
