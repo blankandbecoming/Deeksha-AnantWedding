@@ -55,7 +55,6 @@
             transform-style: preserve-3d;
             transition: all 1s var(--easing);
             box-shadow: 5px 10px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
         }
 
         .flap {
@@ -124,7 +123,7 @@
 
         .emblem {
             position: absolute; 
-            top: calc(50% - 50px);
+            top: calc(50% - 40px);
             width: 80px; 
             height: 80px;
             background-image: url('emblem.webp'); 
@@ -332,15 +331,16 @@
 </head>
 <body>
     <div class="stage">
-        <div class="envelope-full" id="envelope" onclick="openInvite()" ontouchstart="openInvite()">
+        <div class="envelope-full" id="envelope">
             <div class="flap"></div>
             <div class="bottom-flap"></div>
-            <div class="emblem"></div>
+            <!-- Click/Touch event bound specifically to Emblem -->
+            <div class="emblem" onclick="openInvite(event)" ontouchstart="openInvite(event)"></div>
             
             <div class="invite-card" id="card">
                 <nav class="navbar">
                     <ul>
-                        <li><a href="home.html"><u>Home</u></a></li>
+                        <li><a href="home_2.html"><u>Home</u></a></li>
                         <li><a href="events.html">Event</a></li>
                         <li><a href="gallery.html">Gallery</a></li>
                         <li><a href="guestbook.html">Guestbook</a></li>
@@ -396,25 +396,30 @@
     </div>
 
     <script>
-function openInvite() {
+function openInvite(e) {
+    if (e) e.stopPropagation();
+    
     const env = document.getElementById('envelope');
 
-    if (!env.classList.contains('open')) {
-        env.classList.add('open');
-        
-        // Directly trigger audio play function on parent window, fallback to postMessage
+    // Trigger audio directly on parent window or post message
+    try {
         if (window.parent && typeof window.parent.startMusic === 'function') {
             window.parent.startMusic();
         } else {
             window.parent.postMessage('play_wedding_music', '*');
         }
+    } catch(err) {
+        window.parent.postMessage('play_wedding_music', '*');
+    }
 
+    if (!env.classList.contains('open')) {
+        env.classList.add('open');
         startPetals();
     }
 }
 
 function startPetals() {
-   const colors = [ '#E6E6FA', '#DCD0FF', '#BDB5D5', '#967BB6', '#7B1FA2', '#8A9A86' ];
+    const colors = [ '#E6E6FA', '#DCD0FF', '#BDB5D5', '#967BB6', '#7B1FA2', '#8A9A86' ];
 
     for (let i = 0; i < 60; i++) { 
         setTimeout(() => {
