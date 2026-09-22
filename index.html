@@ -34,13 +34,23 @@
             scroll-behavior: smooth;
         }
 
+        /* Initially lock scrolling so only envelope is shown */
         body, html { 
             margin: 0; 
             padding: 0; 
             width: 100%; 
+            height: 100%;
+            overflow: hidden; 
             background-color: var(--purple-bg); 
             -webkit-tap-highlight-color: transparent;
             font-family: 'Asul', serif;
+        }
+
+        /* Unlocked scrolling after envelope opens */
+        body.envelope-opened, html.envelope-opened {
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: auto;
         }
 
         /* --- NAVBAR INITIAL STATE (HIDDEN) --- */
@@ -532,7 +542,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 80px 20px 40px 20px;
+            padding: 80px 20px 70px 20px; /* Added extra bottom padding for fixed button */
             font-family: 'Cinzel', serif;
             position: relative;
         }
@@ -541,7 +551,7 @@
         .cards-scroll-wrapper {
             width: 100%;
             max-width: 700px;
-            max-height: 50vh;
+            max-height: 55vh;
             overflow-y: auto;
             margin-top: 20px;
             padding-right: 5px;
@@ -644,35 +654,42 @@
             text-transform: uppercase;
         }
 
-        /* --- ADD WISH BUTTON AT THE END OF THE PAGE --- */
+        /* --- FIXED SQUARE FULL WIDTH ADD MESSAGE BUTTON AT BOTTOM OF GUESTBOOK SECTION --- */
         .add-wish-btn-container {
-            margin-top: 30px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
+            margin: 0;
+            padding: 0;
+            z-index: 50;
         }
 
         .add-wish-btn {
-            background: linear-gradient(135deg, #5b2368, #8c3599);
-            color: #ffffff;
+            width: 100%;
+            height: 54px;
+            background: linear-gradient(135deg, #5b2368, #3b1445);
+            color: #d4af37;
             font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 14px 32px;
-            border-radius: 30px;
-            border: 1px solid #e6c896;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 0;
+            border: none;
+            border-top: 1px solid #d4af37;
+            border-radius: 0; /* Fully square */
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .add-wish-btn:hover {
             background: linear-gradient(135deg, #b89628, #d4af37);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            color: #3b1445;
         }
 
         /* --- MODAL OVERLAYS --- */
@@ -981,9 +998,9 @@
             <div class="cards-container" id="cardsContainer"></div>
         </div>
 
-        <!-- ADD WISH BUTTON AT THE END OF THE PAGE -->
+        <!-- FIXED FULL WIDTH ADD MESSAGE BUTTON -->
         <div class="add-wish-btn-container">
-            <button class="add-wish-btn" id="openModalBtn">Add Wish</button>
+            <button class="add-wish-btn" id="openModalBtn">+ Add Message</button>
         </div>
     </section>
 
@@ -1162,7 +1179,11 @@
             if (!env.classList.contains('open')) {
                 env.classList.add('open');
                 
-                // Show the navbar upon opening
+                // Unlock page scrolling on open
+                document.documentElement.classList.add('envelope-opened');
+                document.body.classList.add('envelope-opened');
+
+                // Show navbar upon opening
                 if (navbar) {
                     navbar.classList.add('visible');
                 }
