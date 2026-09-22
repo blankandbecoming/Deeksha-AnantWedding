@@ -29,30 +29,41 @@
 </head>
 <body>
 
-    <!-- Global Audio Player (Never reloads) -->
+    <!-- Global Audio Player (Never reloads on frame navigation) -->
     <audio id="globalMusic" preload="auto" playsinline loop>
         <source src="thousandyears.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Main Navigation Frame -->
-    <iframe id="siteFrame" src="home.html" name="siteFrame"></iframe>
+    <iframe id="siteFrame" src="home_2.html" name="siteFrame"></iframe>
 
-  <script>
-    const globalAudio = document.getElementById('globalMusic');
+    <script>
+        const globalAudio = document.getElementById('globalMusic');
 
-    function startMusic() {
-        if (globalAudio && globalAudio.paused) {
-            globalAudio.currentTime = 17;
-            globalAudio.play().catch(err => console.log("Audio play blocked:", err));
+        function startMusic() {
+            if (globalAudio) {
+                if (globalAudio.paused) {
+                    globalAudio.currentTime = 17;
+                    globalAudio.play().catch(err => {
+                        console.log("Audio play blocked by browser policy. Unlocking on next interaction:", err);
+                        const unlock = () => {
+                            globalAudio.play();
+                            window.removeEventListener('click', unlock);
+                            window.removeEventListener('touchstart', unlock);
+                        };
+                        window.addEventListener('click', unlock);
+                        window.addEventListener('touchstart', unlock);
+                    });
+                }
+            }
         }
-    }
 
-    // Listen for messages from inside the iframe
-    window.addEventListener('message', (event) => {
-        if (event.data === 'play_wedding_music') {
-            startMusic();
-        }
-    });
-</script>
+        // Listen for messages from inside child pages inside the iframe
+        window.addEventListener('message', (event) => {
+            if (event.data === 'play_wedding_music') {
+                startMusic();
+            }
+        });
+    </script>
 </body>
 </html>
