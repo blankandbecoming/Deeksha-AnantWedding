@@ -340,7 +340,7 @@
 </head>
 <body>
     <audio id="inviteMusic" preload="auto" playsinline>
-        <source src="song1.mp3" type="audio/mpeg">
+        <source src="thousandyears.mp3" type="audio/mpeg">
     </audio>
 
     <div class="stage">
@@ -414,7 +414,7 @@ function playEmblemMusic(event) {
     if (event) event.stopPropagation();
 
     const env = document.getElementById('envelope');
-    const audio = document.getElementById('thousandyears');
+    const audio = document.getElementById('inviteMusic');
 
     if (audio) {
         audio.currentTime = 17;
