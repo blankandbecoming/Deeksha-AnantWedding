@@ -402,8 +402,12 @@ function openInvite() {
     if (!env.classList.contains('open')) {
         env.classList.add('open');
         
-        // Signal parent window to start playing thousandyears.mp3
-        window.parent.postMessage('play_wedding_music', '*');
+        // Directly trigger audio play function on parent window, fallback to postMessage
+        if (window.parent && typeof window.parent.startMusic === 'function') {
+            window.parent.startMusic();
+        } else {
+            window.parent.postMessage('play_wedding_music', '*');
+        }
 
         startPetals();
     }
