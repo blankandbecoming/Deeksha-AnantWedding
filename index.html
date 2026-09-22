@@ -37,27 +37,22 @@
     <!-- Main Navigation Frame -->
     <iframe id="siteFrame" src="home.html" name="siteFrame"></iframe>
 
-    <script>
-        const globalAudio = document.getElementById('globalMusic');
+  <script>
+    const globalAudio = document.getElementById('globalMusic');
 
-        // Receives trigger message from home.html when envelope is opened
-        window.addEventListener('message', (event) => {
-            if (event.data === 'play_wedding_music') {
-                if (globalAudio) {
-                    globalAudio.currentTime = 17;
-                    globalAudio.play().catch(error => {
-                        console.log("Autoplay restriction encountered. Registering click listener...");
-                        const unlock = () => {
-                            globalAudio.play();
-                            window.removeEventListener('click', unlock);
-                            window.removeEventListener('touchstart', unlock);
-                        };
-                        window.addEventListener('click', unlock);
-                        window.addEventListener('touchstart', unlock);
-                    });
-                }
-            }
-        });
-    </script>
+    function startMusic() {
+        if (globalAudio && globalAudio.paused) {
+            globalAudio.currentTime = 17;
+            globalAudio.play().catch(err => console.log("Audio play blocked:", err));
+        }
+    }
+
+    // Listen for messages from inside the iframe
+    window.addEventListener('message', (event) => {
+        if (event.data === 'play_wedding_music') {
+            startMusic();
+        }
+    });
+</script>
 </body>
 </html>
