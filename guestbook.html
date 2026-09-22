@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Loaded Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Asul:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="navbar.css">
@@ -19,11 +20,12 @@
             padding: 0; 
             width: 100%; 
             height: 100%;
-            overflow: hidden;
+            overflow: hidden; /* Prevents body scrolling */
             -webkit-tap-highlight-color: transparent;
             font-family: 'Cinzel', serif;
         }
 
+        /* --- TRULY STATIC BACKGROUND (Fixed viewport overlay) --- */
         body::before {
             content: '';
             position: fixed;
@@ -36,15 +38,16 @@
             background-position: center center;
             background-repeat: no-repeat;
             background-size: cover;
-            z-index: -1;
-            transform: translateZ(0);
+            z-index: -1; /* Placed behind everything */
+            transform: translateZ(0); /* Prevents mobile scroll artifacts */
         }
 
+        /* --- SCROLLABLE CONTENT AREA --- */
         .main {
             width: 100%;
             height: 100vh;
             height: 100dvh;
-            overflow-y: auto;
+            overflow-y: auto; /* Only content inside scrolls */
             -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
@@ -53,6 +56,7 @@
             position: relative;
         }
 
+        /* --- TOAST NOTIFICATION --- */
         .toast {
             position: fixed;
             top: 20px;
@@ -77,6 +81,7 @@
             opacity: 1;
         }
 
+        /* --- FLOATING PLUS BUTTON --- */
         .fab-btn {
             position: fixed;
             bottom: 30px;
@@ -101,6 +106,7 @@
             background-color: #b89628;
         }
 
+        /* --- COMMON MODAL OVERLAY --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -154,6 +160,7 @@
             line-height: 1;
         }
 
+        /* --- FORM STYLES --- */
         .form-group {
             margin-bottom: 15px;
         }
@@ -198,6 +205,7 @@
             background-color: #b89628;
         }
 
+        /* --- VIEW MESSAGE MODAL STYLES --- */
         .message-modal-content {
             background: #fdfbf7;
             border: 2px solid #d4af37;
@@ -215,6 +223,7 @@
             white-space: pre-wrap;
         }
 
+        /* --- GUESTBOOK CARDS GRID (FIXED 2 IN A ROW) --- */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -231,6 +240,7 @@
             }
         }
 
+        /* --- PURPLE FOLDED BOOK CARD STYLES --- */
         .book-card {
             position: relative;
             width: 100%;
@@ -316,11 +326,12 @@
 </head>
 <body>
 
+    <!-- Notification Toast -->
     <div id="toastNotification" class="toast"></div>
 
     <nav class="navbar">
         <ul>
-            <li><a href="home.html">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="events.html">Event</a></li>
             <li><a href="gallery.html">Gallery</a></li>
             <li><a href="guestbook.html"><u>Guestbook</u></a></li>
@@ -332,8 +343,10 @@
         <div class="cards-container" id="cardsContainer"></div>
     </div>
 
+    <!-- Floating Plus Sign Button -->
     <button class="fab-btn" id="openModalBtn" aria-label="Add Wish">+</button>
 
+    <!-- Create Message Modal Form -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-card">
             <button class="close-btn" id="closeModalBtn">&times;</button>
@@ -352,6 +365,7 @@
         </div>
     </div>
 
+    <!-- Read Message Modal -->
     <div class="modal-overlay" id="viewModalOverlay">
         <div class="modal-card message-modal-content">
             <button class="close-btn" id="closeViewModalBtn">&times;</button>
@@ -360,6 +374,7 @@
         </div>
     </div>
 
+    <!-- FIREBASE SDK INCLUSIONS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } 
@@ -375,10 +390,12 @@
             measurementId: "G-RZ49KWR6HL"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const guestbookRef = collection(db, "guestbook");
 
+        // DOM Elements
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalOverlay = document.getElementById('modalOverlay');
@@ -390,6 +407,7 @@
         const modalAuthorTitle = document.getElementById('modalAuthorTitle');
         const modalMessageBody = document.getElementById('modalMessageBody');
 
+        // Modal Controls
         openModalBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
         closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
         closeViewModalBtn.addEventListener('click', () => viewModalOverlay.classList.remove('active'));
@@ -402,6 +420,7 @@
             });
         });
 
+        // Add New Message to Database
         guestbookForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -421,15 +440,17 @@
             }
         });
 
+        // Real-time listener: Syncs database with DOM seamlessly
         const q = query(guestbookRef, orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
-            cardsContainer.innerHTML = "";
+            cardsContainer.innerHTML = ""; // Clear existing grid
             snapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 createBookCard(data.name, data.message);
             });
         });
 
+        // Render card
         function createBookCard(name, message) {
             const card = document.createElement('div');
             card.classList.add('book-card');
@@ -441,6 +462,7 @@
                 </div>
             `;
 
+            // Click Handler for opening the message modal
             card.addEventListener('click', () => {
                 modalAuthorTitle.textContent = `${name}'s Wish`;
                 modalMessageBody.textContent = message;
