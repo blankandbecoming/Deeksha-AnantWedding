@@ -29,13 +29,13 @@
 </head>
 <body>
 
-    <!-- Global Audio Player (Never reloads on frame navigation) -->
+    <!-- Global Persistent Audio Player -->
     <audio id="globalMusic" preload="auto" playsinline loop>
         <source src="thousandyears.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Main Navigation Frame -->
-    <iframe id="siteFrame" src="home_2.html" name="siteFrame"></iframe>
+    <!-- Main Content Frame -->
+    <iframe id="siteFrame" src="home.html" name="siteFrame"></iframe>
 
     <script>
         const globalAudio = document.getElementById('globalMusic');
@@ -44,23 +44,31 @@
             if (globalAudio) {
                 if (globalAudio.paused) {
                     globalAudio.currentTime = 17;
-                    globalAudio.play().catch(err => {
-                        console.log("Audio play blocked by browser policy. Unlocking on next interaction:", err);
-                        const unlock = () => {
-                            globalAudio.play();
-                            window.removeEventListener('click', unlock);
-                            window.removeEventListener('touchstart', unlock);
-                        };
-                        window.addEventListener('click', unlock);
-                        window.addEventListener('touchstart', unlock);
-                    });
+                    const playPromise = globalAudio.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.catch(err => {
+                            console.log("Autoplay policy blocked playback. Waiting for tap...", err);
+                            const unlock = () => {
+                                globalAudio.currentTime = 17;
+                                globalAudio.play();
+                                window.removeEventListener('click', unlock);
+                                window.removeEventListener('touchstart', unlock);
+                            };
+                            window.addEventListener('click', unlock, { once: true });
+                            window.addEventListener('touchstart', unlock, { once: true });
+                        });
+                    }
                 }
             }
         }
 
-        // Listen for messages from inside child pages inside the iframe
+        // Expose function globally
+        window.startMusic = startMusic;
+
+        // Listen for postMessage from iframe
         window.addEventListener('message', (event) => {
-            if (event.data === 'play_wedding_music') {
+            if (event.data === 'play_wedding_music' || (event.data && event.data.type === 'play_wedding_music')) {
                 startMusic();
             }
         });
