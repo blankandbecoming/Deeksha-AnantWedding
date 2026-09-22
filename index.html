@@ -43,6 +43,18 @@
             font-family: 'Asul', serif;
         }
 
+        /* --- NAVBAR INITIAL STATE (HIDDEN) --- */
+        .navbar {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease 1s; /* Fades in smoothly after envelope opening */
+        }
+
+        .navbar.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         /* --- STAGE / ENVELOPE SECTION --- */
         .stage { 
             width: 100vw; 
@@ -850,8 +862,8 @@
         <source src="song1.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- FIXED NAVBAR -->
-    <nav class="navbar">
+    <!-- FIXED NAVBAR (Initially Hidden) -->
+    <nav class="navbar" id="navbar">
         <ul>
             <li><a href="#home">Home</a></li>
             <li><a href="#events">Event</a></li>
@@ -1117,10 +1129,16 @@
         function openInvite() {
             const env = document.getElementById('envelope');
             const audio = document.getElementById('inviteMusic');
+            const navbar = document.getElementById('navbar');
 
             if (!env.classList.contains('open')) {
                 env.classList.add('open');
                 
+                // Show the navbar upon opening
+                if (navbar) {
+                    navbar.classList.add('visible');
+                }
+
                 audio.currentTime = 17;
                 audio.play().catch(error => {
                     const forcePlay = () => {
