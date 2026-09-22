@@ -340,7 +340,7 @@
 </head>
 <body>
     <audio id="inviteMusic" preload="auto" playsinline>
-        <source src="thousandyears.mp3" type="audio/mpeg">
+        <source src="thousandyears.mp3">
     </audio>
 
     <div class="stage">
@@ -354,10 +354,10 @@
             <div class="invite-card" id="card">
                 <nav class="navbar">
                     <ul>
-                        <li><a href="index.html"><u>Home</u></a></li>
-                        <li><a href="events.html">Event</a></li>
-                        <li><a href="gallery.html">Gallery</a></li>
-                        <li><a href="guestbook.html">Guestbook</a></li>
+                        <li><a href="#index"><u>Home</u></a></li>
+                        <li><a href="#events">Event</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#guestbook">Guestbook</a></li>
                     </ul>
                 </nav>
 
@@ -428,13 +428,45 @@ function playEmblemMusic(event) {
             document.addEventListener('click', forcePlay);
             document.addEventListener('touchstart', forcePlay);
         });
+        localStorage.setItem('audioPlaying', 'true');
     }
 
     if (env && !env.classList.contains('open')) {
         env.classList.add('open');
+        localStorage.setItem('envelopeOpen', 'true');
         startPetals();
     }
 }
+
+/* --- PERSIST AUDIO & ENVELOPE STATE ACROSS PAGES --- */
+window.addEventListener('beforeunload', () => {
+    const audio = document.getElementById('inviteMusic');
+    if (audio && !audio.paused) {
+        localStorage.setItem('audioTime', audio.currentTime);
+        localStorage.setItem('audioPlaying', 'true');
+    }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('inviteMusic');
+    const env = document.getElementById('envelope');
+    const savedTime = localStorage.getItem('audioTime');
+    const wasPlaying = localStorage.getItem('audioPlaying');
+    const wasOpen = localStorage.getItem('envelopeOpen');
+
+    // Keep envelope open if guest already opened it
+    if (wasOpen === 'true' && env) {
+        env.classList.add('open');
+    }
+
+    // Resume playing audio at current timestamp across navigation
+    if (wasPlaying === 'true' && audio) {
+        audio.currentTime = parseFloat(savedTime) || 17;
+        audio.play().catch(err => {
+            console.log("Autoplay blocked on navigation. User tap required.");
+        });
+    }
+});
 
 function startPetals() {
     const colors = [ '#E6E6FA', '#DCD0FF', '#BDB5D5', '#967BB6', '#7B1FA2', '#8A9A86' ];
