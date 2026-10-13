@@ -34,7 +34,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Initially lock scrolling so only envelope is shown */
         body, html { 
             margin: 0; 
             padding: 0; 
@@ -46,18 +45,16 @@
             font-family: 'Asul', serif;
         }
 
-        /* Unlocked scrolling after envelope opens */
         body.envelope-opened, html.envelope-opened {
             overflow-x: hidden;
             overflow-y: auto;
             height: auto;
         }
 
-        /* --- NAVBAR INITIAL STATE (HIDDEN) --- */
         .navbar {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 1s ease 1s; /* Fades in smoothly after envelope opening */
+            transition: opacity 1s ease 1s;
         }
 
         .navbar.visible {
@@ -65,7 +62,6 @@
             pointer-events: auto;
         }
 
-        /* --- STAGE / ENVELOPE SECTION --- */
         .stage { 
             width: 100vw; 
             height: 100vh;
@@ -366,7 +362,6 @@
             100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; } 
         }
 
-        /* --- MAIN SECTION CONTAINERS --- */
         .section {
             width: 100%;
             min-height: 100vh;
@@ -374,7 +369,6 @@
             box-sizing: border-box;
         }
 
-        /* --- EVENTS SECTION --- */
         .events-section {
             background-image: url('enback.webp'); 
             background-position: center center;
@@ -463,7 +457,6 @@
             text-transform: uppercase;
         }
 
-        /* --- GALLERY SECTION --- */
         .gallery-section {
             background-image: url('galleryback.webp');
             background-position: center center;
@@ -533,7 +526,6 @@
             -webkit-user-select: none;
         }
 
-        /* --- GUESTBOOK SECTION --- */
         .guestbook-section {
             background-image: url('enback.webp');
             background-position: center center;
@@ -542,12 +534,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 80px 20px 70px 20px; /* Added extra bottom padding for fixed button */
+            padding: 80px 20px 70px 20px;
             font-family: 'Cinzel', serif;
             position: relative;
         }
 
-        /* Guestbook Scrollable Cards Area */
         .cards-scroll-wrapper {
             width: 100%;
             max-width: 700px;
@@ -654,7 +645,6 @@
             text-transform: uppercase;
         }
 
-        /* --- FIXED SQUARE FULL WIDTH ADD MESSAGE BUTTON AT BOTTOM OF GUESTBOOK SECTION --- */
         .add-wish-btn-container {
             position: absolute;
             bottom: 0;
@@ -678,7 +668,7 @@
             padding: 0;
             border: none;
             border-top: 1px solid #d4af37;
-            border-radius: 0; /* Fully square */
+            border-radius: 0;
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -692,7 +682,6 @@
             color: #3b1445;
         }
 
-        /* --- MODAL OVERLAYS --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -723,6 +712,8 @@
             border-radius: 20px;
             width: 90%;
             max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
             padding: 25px 20px;
             text-align: center;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
@@ -804,9 +795,15 @@
             border: 1px solid #e6c896;
             box-shadow: 0 4px 12px rgba(75, 29, 82, 0.3);
             transition: all 0.3s ease;
+            margin-top: 5px;
         }
 
-        /* --- FORM STYLES --- */
+        .btn-location:hover {
+            background: linear-gradient(135deg, #6b2875, #8c3599);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(75, 29, 82, 0.4);
+        }
+
         .form-group {
             margin-bottom: 15px;
             text-align: left;
@@ -879,12 +876,10 @@
 </head>
 <body>
 
-    <!-- AUDIO FOR INVITATION -->
     <audio id="inviteMusic" preload="auto" playsinline>
         <source src="thousandyears.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- FIXED NAVBAR (Initially Hidden) -->
     <nav class="navbar" id="navbar">
         <ul>
             <li><a href="#home">Home</a></li>
@@ -894,7 +889,6 @@
         </ul>
     </nav>
 
-    <!-- SECTION 1: HOME / INVITATION ENVELOPE -->
     <section id="home" class="stage">
         <div class="envelope-full" id="envelope" onclick="openInvite()" ontouchstart="openInvite()">
             <div class="flap"></div>
@@ -948,7 +942,6 @@
         </div>
     </section>
 
-    <!-- SECTION 2: EVENTS -->
     <section id="events" class="section events-section">
         <img src="butterfly.gif" alt="Butterfly" class="butterfly" id="butterfly">
         <img src="eventstext.webp" style="width: 50%; max-width: 220px;" alt="EVENTS">
@@ -965,8 +958,7 @@
             <img src="haldi.webp" alt="Haldi Ceremony">
             <div class="card-content">
                 <h3>10th/11th December</h3>
-                <p>Deeksha's Haldi<br>Mehendi</p><br>
-                
+                <p>Haldi<br>Mehendi</p>
             </div>
         </div>
 
@@ -979,10 +971,8 @@
         </div>
     </section>
 
-    <!-- SECTION 3: GALLERY -->
     <section id="gallery" class="section gallery-section">
         <img src="camera.webp" class="camera-img" alt="Camera with flowers">
-
         <div class="upload-box">
             <h3 class="upload-box-heading">UPLOAD YOUR PHOTOS & VIDEOS</h3>
             <img src="cloud.webp" class="upload-icon" alt="Upload cloud icon">
@@ -990,16 +980,11 @@
         </div>
     </section>
 
-    <!-- SECTION 4: GUESTBOOK -->
     <section id="guestbook" class="section guestbook-section">
         <img src="guestbooktitle.webp" style="width: 86%; max-width: 300px; margin-top:20px;" alt="GUESTBOOK">
-        
-        <!-- Scrollable Guestbook Area -->
         <div class="cards-scroll-wrapper">
             <div class="cards-container" id="cardsContainer"></div>
         </div>
-
-        <!-- FIXED FULL WIDTH ADD MESSAGE BUTTON -->
         <div class="add-wish-btn-container">
             <button class="add-wish-btn" id="openModalBtn">+ Add Message</button>
         </div>
@@ -1007,7 +992,7 @@
 
     <!-- MODALS -->
 
-    <!-- Event Details Modal -->
+    <!-- Event Details Modal (Supports multi-event display) -->
     <div class="modal-overlay" id="eventModal">
         <div class="modal-card">
             <button class="modal-close" id="closeEventModal">&times;</button>
@@ -1015,18 +1000,20 @@
             <div id="modalDate" class="modal-date"></div>
             <h2 id="modalTitle" class="modal-title"></h2>
             
-            <div class="modal-info">
+            <div class="modal-info" id="modalInfoContainer">
                 <p id="modalTime"></p>
                 <p id="modalVenue"></p>
                 <p id="modalDesc"></p>
             </div>
 
-            <a id="modalLocationBtn" href="#" target="_blank" class="btn-location">
-                <svg width="14" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg>
-                Location
-            </a>
+            <div id="modalButtonContainer">
+                <a id="modalLocationBtn" href="#" target="_blank" class="btn-location">
+                    <svg width="14" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    Location
+                </a>
+            </div>
         </div>
     </div>
 
@@ -1100,7 +1087,6 @@
             });
         });
 
-        // Form Submission with async safety & UI loading feedback
         guestbookForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const nameInput = document.getElementById('guestName');
@@ -1131,7 +1117,6 @@
             }
         });
 
-        // Real-time listener for Firestore documents
         const q = query(guestbookRef, orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             cardsContainer.innerHTML = "";
@@ -1171,7 +1156,6 @@
     </script>
 
     <script>
-        /* --- ENVELOPE & PETALS --- */
         function openInvite() {
             const env = document.getElementById('envelope');
             const audio = document.getElementById('inviteMusic');
@@ -1180,11 +1164,9 @@
             if (!env.classList.contains('open')) {
                 env.classList.add('open');
                 
-                // Unlock page scrolling on open
                 document.documentElement.classList.add('envelope-opened');
                 document.body.classList.add('envelope-opened');
 
-                // Show navbar upon opening
                 if (navbar) {
                     navbar.classList.add('visible');
                 }
@@ -1229,7 +1211,6 @@
             }
         }
 
-        /* --- COUNTDOWN TIMER --- */
         function startCountdown() {
             const targetDate = new Date('2026-12-12T18:00:00').getTime();
 
@@ -1259,7 +1240,7 @@
 
         startCountdown();
 
-        /* --- EVENTS MODAL --- */
+        /* --- EVENTS MODAL & DATA STRUCTURE --- */
         const eventData = {
             engagement: {
                 title: "Engagement & Godh Bharai",
@@ -1270,22 +1251,26 @@
                 img: "engagement.webp",
                 locationUrl: "https://maps.app.goo.gl/txZhoH37wFUkFG577?g_st=aw"
             },
-            haldi: [{
-                title: "Bride's Haldi & Mehendi",
-                date: "11th December",
-                time: "Time: 10:00 AM onwards",
-                venue: "Venue: Gupta Residence",
-                desc: "A bright and cheerful morning filled with turmeric blessings, henna artistry, and music.",
-                img: "haldi.webp",
-                locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
-            },{
-                title: "Groom's Haldi",
-                date: "10th December",
-                time: "Time: 10:00 AM onwards",
-                venue: "Venue: Jain Residence",
-                desc: "A bright and cheerful morning filled with turmeric blessings, henna artistry, and music.",
-                img: "haldi.webp",
-                locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"}],
+            haldi: [
+                {
+                    title: "Bride's Haldi & Mehendi",
+                    date: "11th December",
+                    time: "Time: 10:00 AM onwards",
+                    venue: "Venue: Gupta Residence",
+                    desc: "A bright and cheerful morning filled with turmeric blessings, henna artistry, and music.",
+                    img: "haldi.webp",
+                    locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
+                },
+                {
+                    title: "Groom's Haldi",
+                    date: "10th December",
+                    time: "Time: 10:00 AM onwards",
+                    venue: "Venue: Jain Residence",
+                    desc: "A bright and cheerful morning filled with turmeric blessings and celebrations.",
+                    img: "haldi.webp",
+                    locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
+                }
+            ], // <--- Added comma here to fix the syntax error!
             shaadi: {
                 title: "Shaadi Ceremony",
                 date: "12th December",
@@ -1305,18 +1290,59 @@
             card.addEventListener('click', () => {
                 const eventType = card.getAttribute('data-event');
                 const data = eventData[eventType];
+                const infoContainer = document.getElementById('modalInfoContainer');
+                const btnContainer = document.getElementById('modalButtonContainer');
+                infoContainer.innerHTML = '';
+                btnContainer.innerHTML = '';
 
-                if (data) {
+                if (Array.isArray(data)) {
+                    // Handles Haldi with multiple separate entries
+                    document.getElementById('modalImg').src = data[0].img;
+                    document.getElementById('modalDate').textContent = "10th & 11th December";
+                    document.getElementById('modalTitle').textContent = "Haldi & Mehendi Ceremonies";
+
+                    data.forEach(event => {
+                        const eventBlock = document.createElement('div');
+                        eventBlock.style.marginBottom = "15px";
+                        eventBlock.style.borderBottom = "1px solid #e6c896";
+                        eventBlock.style.paddingBottom = "12px";
+
+                        eventBlock.innerHTML = `
+                            <div class="modal-date" style="color: #b38744; font-size: 0.75rem; font-weight: 600;">${event.date}</div>
+                            <h4 style="font-family: 'Cinzel', serif; color: #4b1d52; margin: 4px 0; font-size: 1rem;">${event.title}</h4>
+                            <p style="margin: 4px 0;">${event.time}</p>
+                            <p style="margin: 4px 0;"><strong>${event.venue}</strong></p>
+                            <p style="margin: 4px 0; font-size: 0.8rem; color: #555;">${event.desc}</p>
+                            <a href="${event.locationUrl}" target="_blank" class="btn-location" style="padding: 8px 16px; font-size: 0.75rem; margin-top: 6px;">
+                                <svg width="12" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                Location (${event.title})
+                            </a>
+                        `;
+                        infoContainer.appendChild(eventBlock);
+                    });
+                } else if (data) {
+                    // Handles single events (Engagement, Shaadi)
                     document.getElementById('modalImg').src = data.img;
                     document.getElementById('modalDate').textContent = data.date;
                     document.getElementById('modalTitle').textContent = data.title;
-                    document.getElementById('modalTime').textContent = data.time;
-                    document.getElementById('modalVenue').textContent = data.venue;
-                    document.getElementById('modalDesc').textContent = data.desc;
-                    document.getElementById('modalLocationBtn').href = data.locationUrl;
+                    
+                    infoContainer.innerHTML = `
+                        <p>${data.time}</p>
+                        <p><strong>${data.venue}</strong></p>
+                        <p>${data.desc}</p>
+                    `;
 
-                    eventModal.classList.add('active');
+                    btnContainer.innerHTML = `
+                        <a id="modalLocationBtn" href="${data.locationUrl}" target="_blank" class="btn-location">
+                            <svg width="14" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            Location
+                        </a>
+                    `;
                 }
+
+                eventModal.classList.add('active');
             });
         });
 
@@ -1325,7 +1351,6 @@
             if (e.target === eventModal) eventModal.classList.remove('active');
         });
 
-        /* --- BUTTERFLY ANIMATION --- */
         const butterfly = document.getElementById('butterfly');
         let currentX = window.innerWidth / 2;
         let currentY = window.innerHeight / 3;
