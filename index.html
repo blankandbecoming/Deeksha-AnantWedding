@@ -957,7 +957,7 @@
         <div class="card reverse" data-event="haldi">
             <img src="haldi.webp" alt="Haldi Ceremony">
             <div class="card-content">
-                <h3>10th & 11th December</h3>
+                <h3>10th/11th December</h3>
                 <p>Haldi<br>Mehendi</p>
             </div>
         </div>
@@ -992,7 +992,7 @@
 
     <!-- MODALS -->
 
-    <!-- Event Details Modal (Supports multi-event display) -->
+    <!-- Event Details Modal -->
     <div class="modal-overlay" id="eventModal">
         <div class="modal-card">
             <button class="modal-close" id="closeEventModal">&times;</button>
@@ -1268,7 +1268,7 @@
                     img: "haldi.webp",
                     locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
                 }
-            ], // <--- Added comma here to fix the syntax error!
+            ],
             shaadi: {
                 title: "Shaadi Ceremony",
                 date: "12th December",
@@ -1294,8 +1294,9 @@
                 btnContainer.innerHTML = '';
 
                 if (Array.isArray(data)) {
-                    // Handles Haldi with multiple separate entries
+                    // Handles Haldi with multiple separate entries (no description property)
                     document.getElementById('modalImg').src = data[0].img;
+                    document.getElementById('modalDate').textContent = "10th & 11th December";
                     document.getElementById('modalTitle').textContent = "Haldi & Mehendi Ceremonies";
 
                     data.forEach(event => {
@@ -1309,7 +1310,6 @@
                             <h4 style="font-family: 'Cinzel', serif; color: #4b1d52; margin: 4px 0; font-size: 1rem;">${event.title}</h4>
                             <p style="margin: 4px 0;">${event.time}</p>
                             <p style="margin: 4px 0;"><strong>${event.venue}</strong></p>
-                            <p style="margin: 4px 0; font-size: 0.8rem; color: #555;">${event.desc}</p>
                             <a href="${event.locationUrl}" target="_blank" class="btn-location" style="padding: 8px 16px; font-size: 0.75rem; margin-top: 6px;">
                                 <svg width="12" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                                 Location (${event.title})
@@ -1318,7 +1318,7 @@
                         infoContainer.appendChild(eventBlock);
                     });
                 } else if (data) {
-                    // Handles single events (Engagement, Shaadi)
+                    // Handles single events (Engagement, Shaadi) with descriptions included
                     document.getElementById('modalImg').src = data.img;
                     document.getElementById('modalDate').textContent = data.date;
                     document.getElementById('modalTitle').textContent = data.title;
