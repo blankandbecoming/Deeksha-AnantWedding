@@ -957,7 +957,7 @@
         <div class="card reverse" data-event="haldi">
             <img src="haldi.webp" alt="Haldi Ceremony">
             <div class="card-content">
-                <h3>10th/11th December</h3>
+                <h3>10th & 11th December</h3>
                 <p>Haldi<br>Mehendi</p>
             </div>
         </div>
@@ -1257,7 +1257,6 @@
                     date: "11th December",
                     time: "Time: 10:00 AM onwards",
                     venue: "Venue: Gupta Residence",
-                    desc: "A bright and cheerful morning filled with turmeric blessings, henna artistry, and music.",
                     img: "haldi.webp",
                     locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
                 },
@@ -1266,7 +1265,6 @@
                     date: "10th December",
                     time: "Time: 10:00 AM onwards",
                     venue: "Venue: Jain Residence",
-                    desc: "A bright and cheerful morning filled with turmeric blessings and celebrations.",
                     img: "haldi.webp",
                     locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
                 }
@@ -1298,7 +1296,6 @@
                 if (Array.isArray(data)) {
                     // Handles Haldi with multiple separate entries
                     document.getElementById('modalImg').src = data[0].img;
-                    document.getElementById('modalDate').textContent = "10th & 11th December";
                     document.getElementById('modalTitle').textContent = "Haldi & Mehendi Ceremonies";
 
                     data.forEach(event => {
