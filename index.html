@@ -1,3 +1,8 @@
+To remove the location buttons from the Haldi section only, you can omit the location link or remove the anchor button creation code inside the `Array.isArray(data)` loop for Haldi.
+
+Here is the complete, regenerated code with the location buttons removed specifically from the Haldi section:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1257,16 +1262,14 @@
                     date: "11th December",
                     time: "Time: 10:00 AM onwards",
                     venue: "Venue: Gupta Residence",
-                    img: "haldi.webp",
-                    locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
+                    img: "haldi.webp"
                 },
                 {
                     title: "Groom's Haldi",
                     date: "10th December",
                     time: "Time: 10:00 AM onwards",
                     venue: "Venue: Jain Residence",
-                    img: "haldi.webp",
-                    locationUrl: "https://maps.app.goo.gl/yfhjGbXpCD2hWVjs5"
+                    img: "haldi.webp"
                 }
             ],
             shaadi: {
@@ -1294,8 +1297,9 @@
                 btnContainer.innerHTML = '';
 
                 if (Array.isArray(data)) {
-                    // Handles Haldi with multiple separate entries (no description property)
+                    // Handles Haldi with multiple separate entries (no description and no location buttons)
                     document.getElementById('modalImg').src = data[0].img;
+                    document.getElementById('modalDate').textContent = "10th & 11th December";
                     document.getElementById('modalTitle').textContent = "Haldi & Mehendi Ceremonies";
 
                     data.forEach(event => {
@@ -1309,15 +1313,11 @@
                             <h4 style="font-family: 'Cinzel', serif; color: #4b1d52; margin: 4px 0; font-size: 1rem;">${event.title}</h4>
                             <p style="margin: 4px 0;">${event.time}</p>
                             <p style="margin: 4px 0;"><strong>${event.venue}</strong></p>
-                            <a href="${event.locationUrl}" target="_blank" class="btn-location" style="padding: 8px 16px; font-size: 0.75rem; margin-top: 6px;">
-                                <svg width="12" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                Location (${event.title})
-                            </a>
                         `;
                         infoContainer.appendChild(eventBlock);
                     });
                 } else if (data) {
-                    // Handles single events (Engagement, Shaadi) with descriptions included
+                    // Handles single events (Engagement, Shaadi) with descriptions and location buttons included
                     document.getElementById('modalImg').src = data.img;
                     document.getElementById('modalDate').textContent = data.date;
                     document.getElementById('modalTitle').textContent = data.title;
@@ -1387,3 +1387,5 @@
     </script>
 </body>
 </html>
+
+```
